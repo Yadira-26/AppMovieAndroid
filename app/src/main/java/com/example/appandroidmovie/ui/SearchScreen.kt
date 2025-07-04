@@ -21,13 +21,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.appandroidmovie.ui.theme.AppAndroidMovieTheme
 
 @OptIn(ExperimentalMaterial3Api::class) // Para TextField
 @Composable
 fun SearchScreen(
     movieViewModel: MovieViewModel, // Recibe el ViewModel
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     val searchQuery = movieViewModel.searchQuery
     val searchedMovies = movieViewModel.searchedMovies

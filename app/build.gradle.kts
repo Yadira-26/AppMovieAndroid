@@ -59,7 +59,6 @@ dependencies {
 
     //integración de corrutinas con kotlinx-coroutines-android
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-
     implementation("androidx.compose.runtime:runtime-livedata:1.6.0")
 
     implementation(libs.androidx.core.ktx)
