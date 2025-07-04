@@ -1,6 +1,5 @@
 package com.example.appandroidmovie.ui
 
-
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search

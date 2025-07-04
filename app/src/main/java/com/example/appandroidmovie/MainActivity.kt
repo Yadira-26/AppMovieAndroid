@@ -87,7 +87,7 @@ fun MainAppScreen(movieViewModel: MovieViewModel) {
                 }
             }
         }
- 
+
 
 @Composable
 fun PopularMoviesScreen(movieViewModel: MovieViewModel, modifier: Modifier = Modifier) {
