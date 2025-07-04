@@ -1,17 +1,24 @@
 package com.example.appandroidmovie.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,18 +27,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.appandroidmovie.R
 import com.example.appandroidmovie.model.Movie
 import com.example.appandroidmovie.network.MovieService
-import androidx.compose.foundation.Image
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.navigation.NavController
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -74,53 +77,68 @@ fun MovieDetailScreen(
             )
         }
     ) { paddingValues ->
+        // Crea un estado de scroll
+        val scrollState = rememberScrollState()
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp),
+                .padding(paddingValues) // Aplica el padding del Scaffold
+                .verticalScroll(scrollState) // ¡Aquí está la magia!
+                .padding(16.dp), // Padding adicional para el contenido interno
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (isLoading) {
                 CircularProgressIndicator()
-            } else if (errorMessage != null) {
-                Text(text = errorMessage!!, color = MaterialTheme.colorScheme.error)
-            } else if (movieDetail != null) {
-                val movie = movieDetail!! // Sabemos que no es null aquí
-
-                val posterUrl = MovieService.getPosterUrl(movie.posterPath)
-                Image(
-                    painter = rememberAsyncImagePainter(
-                        ImageRequest.Builder(LocalContext.current)
-                            .data(data = posterUrl)
-                            .apply(block = fun ImageRequest.Builder.() {
-                                crossfade(true)
-                                placeholder(R.drawable.ic_launcher_background) // Asegúrate que existen
-                                error(R.drawable.ic_launcher_foreground)
-                            }).build()
-                    ),
-                    contentDescription = "Póster de ${movie.title}",
-                    modifier = Modifier.size(200.dp, 300.dp), // Tamaño más grande para detalle
-                    contentScale = ContentScale.Fit
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = movie.title,
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "Fecha de Lanzamiento: ${movie.releaseDate ?: "N/A"}")
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "Puntuación: ${movie.voteAverage}/10 (${movie.voteCount} votos)")
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "Resumen:", style = MaterialTheme.typography.titleMedium)
-                Text(text = movie.overview)
-                // Puedes añadir más detalles aquí (géneros, duración, etc.)
-                // si tu modelo Movie y la API los proporcionan.
             } else {
-                Text("No se encontraron detalles para esta película.")
+                val error = errorMessage
+                if (error != null) {
+                    Text(text = error, color = MaterialTheme.colorScheme.error)
+                } else if (movieDetail != null) {
+                    val movie = movieDetail!!
+
+                    val posterUrl = MovieService.getPosterUrl(movie.posterPath)
+                    Image(
+                        painter = rememberAsyncImagePainter(
+                            ImageRequest.Builder(LocalContext.current)
+                                .data(data = posterUrl)
+                                .apply {
+                                    crossfade(true)
+                                    placeholder(R.drawable.ic_launcher_background)
+                                    error(R.drawable.ic_launcher_foreground)
+                                }.build()
+                        ),
+                        contentDescription = "Póster de ${movie.title}",
+                        modifier = Modifier.size(200.dp, 300.dp),
+                        contentScale = ContentScale.Fit
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = movie.title,
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = "Fecha de Lanzamiento: ${movie.releaseDate ?: "N/A"}")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = "Puntuación: ${movie.voteAverage}/10 (${movie.voteCount} votos)")
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(text = "Resumen:", style = MaterialTheme.typography.titleMedium)
+                    // Asegúrate de que movie.overview pueda ser largo
+                    Text(text = movie.overview)
+
+                    // Puedes añadir mucho más contenido aquí para probar el scroll
+//                    Spacer(modifier = Modifier.height(16.dp))
+//                    Text("Más información ficticia:")
+//                    repeat(20) { // Añade contenido extra para asegurar que el scroll sea necesario
+//                        Text("Línea de detalle adicional número ${it + 1} para probar el scroll y ver cómo se comporta la pantalla con mucho contenido.")
+//                        Spacer(modifier = Modifier.height(4.dp))
+//                    }
+                } else {
+                    Text("No se encontraron detalles para esta película.")
+                }
             }
         }
+
     }
 }
