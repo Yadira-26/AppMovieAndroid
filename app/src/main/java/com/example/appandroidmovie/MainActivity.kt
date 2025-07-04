@@ -35,12 +35,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter // Importa rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.appandroidmovie.model.Movie // Importa tu modelo Movie
 import com.example.appandroidmovie.network.MovieService
 import com.example.appandroidmovie.ui.MovieViewModel // Importa tu ViewModel
 import com.example.appandroidmovie.ui.theme.AppAndroidMovieTheme
+import com.example.appandroidmovie.ui.AppBottomNavigationBar
+import com.example.appandroidmovie.ui.SearchScreen
 
 class MainActivity : ComponentActivity() {
     // Inyecta el ViewModel
@@ -51,16 +56,38 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AppAndroidMovieTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    PopularMoviesScreen(
-                        movieViewModel = movieViewModel,
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                MainAppScreen(movieViewModel = movieViewModel)
             }
         }
     }
 }
+
+@Composable
+fun MainAppScreen(movieViewModel: MovieViewModel) {
+    val navController = rememberNavController() // Controlador de navegación
+
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        bottomBar = { AppBottomNavigationBar(navController = navController) } // Añade la barra inferior
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = AppDestinations.HOME_ROUTE, // Ruta inicial
+            modifier = Modifier.padding(innerPadding) // Aplica el padding del Scaffold
+        ) {
+            composable(AppDestinations.HOME_ROUTE) {
+                // PopularMoviesScreen ya no necesita modifier, el padding lo maneja NavHost
+                PopularMoviesScreen(movieViewModel = movieViewModel)
+            }
+            composable(AppDestinations.SEARCH_ROUTE) {
+                // SearchScreen tampoco necesita modifier aquí
+                SearchScreen()
+            }
+            // Puedes añadir más destinos (composable) aquí en el futuro
+                }
+            }
+        }
+ 
 
 @Composable
 fun PopularMoviesScreen(movieViewModel: MovieViewModel, modifier: Modifier = Modifier) {
