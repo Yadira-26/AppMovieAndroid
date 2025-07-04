@@ -42,6 +42,7 @@ import coil.request.ImageRequest
 import com.example.appandroidmovie.model.Movie
 import com.example.appandroidmovie.network.MovieService
 import com.example.appandroidmovie.ui.AppBottomNavigationBar
+import com.example.appandroidmovie.ui.FavoritesScreen
 import com.example.appandroidmovie.ui.MovieViewModel
 import com.example.appandroidmovie.ui.SearchScreen
 import com.example.appandroidmovie.ui.theme.AppAndroidMovieTheme
@@ -83,9 +84,12 @@ fun MainAppScreen(movieViewModel: MovieViewModel) {
                 SearchScreen(movieViewModel = movieViewModel)
             }
             // Puedes añadir más destinos (composable) aquí en el futuro
-                }
+            composable(AppDestinations.FAVORITES_ROUTE) {
+                FavoritesScreen() // Nueva pantalla de favoritos
             }
         }
+    }
+}
 
 
 @Composable
