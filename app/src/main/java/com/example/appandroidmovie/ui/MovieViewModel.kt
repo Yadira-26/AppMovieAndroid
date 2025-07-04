@@ -99,4 +99,30 @@ class MovieViewModel : ViewModel() {
             }
         }
     }
+
+    // Función para obtener detalles de una película (simplificado)
+    // Idealmente, harías una llamada a un endpoint de API como /movie/{movie_id}
+    fun fetchMovieById(movieId: Int) {
+        viewModelScope.launch {
+            _isLoadingDetail.value = true
+            _errorMessageDetail.value = null
+            try {
+                // Opción 1: Si tienes un endpoint para detalles de película
+                val movieDetail = MovieService.getMovieDetails(movieId) // Necesitarías crear esta función en MovieService
+                _selectedMovie.value = movieDetail
+
+                // Opción 2: Si solo buscas en la lista de populares ya cargada (menos ideal para detalles completos)
+                // val movie = popularMovies.find { it.id == movieId }
+                // _selectedMovie.value = movie
+                // if (movie == null) {
+                //     _errorMessageDetail.value = "Película no encontrada en la lista actual."
+                // }
+
+            } catch (e: Exception) {
+                _errorMessageDetail.value = "Error al cargar detalles: ${e.message}"
+            } finally {
+                _isLoadingDetail.value = false
+            }
+        }
+    }
 }
