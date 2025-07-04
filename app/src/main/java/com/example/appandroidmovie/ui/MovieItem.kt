@@ -27,7 +27,7 @@ import com.example.appandroidmovie.R // Importa R si usas drawables como placeho
 import com.example.appandroidmovie.model.Movie
 import com.example.appandroidmovie.network.MovieService
 import com.example.appandroidmovie.ui.theme.AppAndroidMovieTheme // Si usas tu tema en la Preview
-
+import com.example.appandroidmovie.ui.MovieItem // Importa tu componente MovieItem
 // El código de MovieItem que pegaste
 @Composable
 fun MovieItem(movie: Movie, modifier: Modifier = Modifier) {
@@ -54,24 +54,24 @@ fun MovieItem(movie: Movie, modifier: Modifier = Modifier) {
                             error(R.drawable.ic_launcher_foreground)
                         }).build()
                 ),
-                contentDescription = "Póster de ${movie.title}",
+                contentDescription = "Póster de ${movie.title}",// Descripción para accesibilidad
                 modifier = Modifier
-                    .size(100.dp, 150.dp)
+                    .size(100.dp, 150.dp)// Tamaño fijo para la imagen del póster
                     .padding(end = 8.dp),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop// Escala la imagen para que llene el espacio, re
             )
 
-            Column(modifier = Modifier.weight(1f)) {
+            Column(modifier = Modifier.weight(1f)) { // Columna para el texto, toma el espacio restante
                 Text(
                     text = movie.title,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
+                    maxLines = 2, // Limita el título a 2 líneas
+                    overflow = TextOverflow.Ellipsis  // Muestra N/A si no hay fecha
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(4.dp))  // Muestra N/A si no hay fecha
                 Text(
-                    text = "Lanzamiento: ${movie.releaseDate ?: "N/A"}",
+                    text = "Lanzamiento: ${movie.releaseDate ?: "N/A"}", // Muestra N/A si no hay fecha
                     style = MaterialTheme.typography.bodySmall
                 )
                 Spacer(modifier = Modifier.height(4.dp))
@@ -79,12 +79,12 @@ fun MovieItem(movie: Movie, modifier: Modifier = Modifier) {
                     text = "Puntuación: ${movie.voteAverage}/10",
                     style = MaterialTheme.typography.bodySmall
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))// Espacio antes de la descripción
                 Text(
                     text = movie.overview,
                     style = MaterialTheme.typography.bodySmall,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis
+                    maxLines = 3, // Limita la descripción a 3 líneas
+                    overflow = TextOverflow.Ellipsis // Añade "..." si es muy larga
                 )
             }
         }
