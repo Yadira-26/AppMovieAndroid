@@ -1,13 +1,16 @@
 package com.example.appandroidmovie.network
 
+import android.util.Log
 import com.example.appandroidmovie.model.MovieResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import io.ktor.client.statement.bodyAsText
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+
 
 
 object MovieService {
@@ -37,6 +40,25 @@ object MovieService {
             // Maneja errores de red o deserialización aquí
             e.printStackTrace()
             null
+        }
+    }
+
+    suspend fun searchMovies(query: String, page: Int = 1): MovieResponse {
+        return try { // Añade un try-catch aquí para más detalles del error de deserialización
+            val response = client.get("${BASE_URL}search/movie") {
+                parameter("api_key", API_KEY)
+                parameter("query", query)
+                parameter("page", page)
+                parameter("language", "es-ES")
+            }
+            Log.d("MovieService", "Raw search response: ${response.bodyAsText()}")
+            response.body() // Aquí ocurre la deserialización
+        } catch (e: Exception) {
+            Log.e("MovieService", "Error deserializing search response: ${e.message}", e)
+            // Lanza una excepción personalizada o devuelve un estado de error si prefieres
+            // en lugar de dejar que la app crashee directamente.
+            // Por ahora, para depurar, relanzar puede estar bien o devolver un MovieResponse vacío/nulo.
+            throw e // O maneja el error de forma más elegante
         }
     }
 

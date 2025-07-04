@@ -22,7 +22,7 @@ data class Movie(
     @SerialName("overview")
     val overview: String,
     @SerialName("release_date")
-    val releaseDate: String?,
+    val releaseDate: String = "N/A",
     @SerialName("vote_average")
-    val voteAverage: Double
+    val voteAverage: Double = 0.0
 )
