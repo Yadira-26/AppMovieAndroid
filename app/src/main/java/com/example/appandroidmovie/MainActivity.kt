@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels // Importa viewModels
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,9 +17,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items // Importa items para LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -38,14 +37,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import coil.compose.rememberAsyncImagePainter // Importa rememberAsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.example.appandroidmovie.model.Movie // Importa tu modelo Movie
+import com.example.appandroidmovie.model.Movie
 import com.example.appandroidmovie.network.MovieService
-import com.example.appandroidmovie.ui.MovieViewModel // Importa tu ViewModel
-import com.example.appandroidmovie.ui.theme.AppAndroidMovieTheme
 import com.example.appandroidmovie.ui.AppBottomNavigationBar
+import com.example.appandroidmovie.ui.MovieViewModel
 import com.example.appandroidmovie.ui.SearchScreen
+import com.example.appandroidmovie.ui.theme.AppAndroidMovieTheme
 
 class MainActivity : ComponentActivity() {
     // Inyecta el ViewModel
@@ -81,7 +80,7 @@ fun MainAppScreen(movieViewModel: MovieViewModel) {
             }
             composable(AppDestinations.SEARCH_ROUTE) {
                 // SearchScreen tampoco necesita modifier aquí
-                SearchScreen()
+                SearchScreen(movieViewModel = movieViewModel)
             }
             // Puedes añadir más destinos (composable) aquí en el futuro
                 }
