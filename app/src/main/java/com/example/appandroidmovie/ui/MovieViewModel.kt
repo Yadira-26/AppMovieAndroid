@@ -3,6 +3,7 @@ package com.example.appandroidmovie.ui
 
 //import androidx.compose.ui.test.cancel
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
@@ -49,8 +50,34 @@ class MovieViewModel : ViewModel() {
     private val _errorMessageDetail = MutableLiveData<String?>()
     val errorMessageDetail: LiveData<String?> = _errorMessageDetail
 
+    // --- Inicio: Lógica para Favoritos ---
+    private val _favoriteMovies = mutableStateListOf<Movie>() // Usamos mutableStateListOf para que Compose observe cambios en la lista
+    val favoriteMovies: List<Movie> = _favoriteMovies // Exponemos como una lista inmutable para el exterior
+
+    // LiveData o StateFlow para saber si la película actual es favorita
+    private val _isCurrentMovieFavorite = MutableLiveData<Boolean>()
+    val isCurrentMovieFavorite: LiveData<Boolean> = _isCurrentMovieFavorite
+
     init {
         fetchPopularMovies()
+    }
+
+    fun toggleFavorite(movie: Movie) {
+        val isCurrentlyFavorite = _favoriteMovies.any { it.id == movie.id }
+        if (isCurrentlyFavorite) {
+            _favoriteMovies.removeIf { it.id == movie.id }
+        } else {
+            _favoriteMovies.add(movie)
+        }
+        // Actualiza el estado de la película actual si es la que se está mostrando
+        if (movie.id == _selectedMovie.value?.id) {
+            _isCurrentMovieFavorite.value = !isCurrentlyFavorite
+        }
+    }
+
+    // Función para verificar si una película es favorita, útil al cargar detalles
+    private fun checkIfFavorite(movieId: Int) {
+        _isCurrentMovieFavorite.value = _favoriteMovies.any { it.id == movieId }
     }
 
     fun fetchPopularMovies() {

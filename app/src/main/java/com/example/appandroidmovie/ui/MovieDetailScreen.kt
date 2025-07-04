@@ -11,6 +11,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -25,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -60,6 +63,7 @@ fun MovieDetailScreen(
     val movieDetail: Movie? by movieViewModel.selectedMovie.observeAsState()
     val isLoading: Boolean by movieViewModel.isLoadingDetail.observeAsState(false) // Nuevo estado para carga de detalles
     val errorMessage: String? by movieViewModel.errorMessageDetail.observeAsState() // Nuevo estado para error de detalles
+    val isFavorite: Boolean by movieViewModel.isCurrentMovieFavorite.observeAsState(false)
 
 
     Scaffold(
@@ -72,6 +76,17 @@ fun MovieDetailScreen(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Volver"
                         )
+                    }
+                },
+                actions = {
+                    movieDetail?.let { movie ->
+                        IconButton(onClick = {movieViewModel.toggleFavorite(movie)}) {
+                            Icon(
+                                imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                contentDescription = "Añadir a Favoritos",
+                                tint = if (isFavorite) Color.Red else MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                     }
                 }
             )
@@ -142,3 +157,4 @@ fun MovieDetailScreen(
 
     }
 }
+

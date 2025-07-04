@@ -72,7 +72,11 @@ fun SearchScreen(
                 contentPadding = PaddingValues(vertical = 8.dp)
             ) {
                 items(searchedMovies) { movie ->
-                    MovieItem(movie = movie) // Reutilizamos el MovieItem
+                    MovieItem(
+                        movie = movie,
+                        onMovieClick = {
+                        }
+                    ) // Reutilizamos el MovieItem
                 }
             }
         } else if (searchQuery.isBlank()) {

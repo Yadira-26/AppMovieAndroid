@@ -1,6 +1,7 @@
 package com.example.appandroidmovie.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,17 +23,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.example.appandroidmovie.R // Importa R si usas drawables como placeholder/error
+import com.example.appandroidmovie.R
 import com.example.appandroidmovie.model.Movie
 import com.example.appandroidmovie.network.MovieService
-import com.example.appandroidmovie.ui.theme.AppAndroidMovieTheme // Si usas tu tema en la Preview
-import com.example.appandroidmovie.ui.MovieItem // Importa tu componente MovieItem
+import com.example.appandroidmovie.ui.theme.AppAndroidMovieTheme
+
 // El código de MovieItem que pegaste
 @Composable
-fun MovieItem(movie: Movie, modifier: Modifier = Modifier) {
+fun MovieItem(movie: Movie, modifier: Modifier = Modifier, onMovieClick: (String) -> Unit) {
     Card(
-        modifier = modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .clickable { onMovieClick(movie.id.toString()) }
     ) {
         Row(
             modifier = Modifier.padding(8.dp),
@@ -61,7 +63,7 @@ fun MovieItem(movie: Movie, modifier: Modifier = Modifier) {
                 contentScale = ContentScale.Crop// Escala la imagen para que llene el espacio, re
             )
 
-            Column(modifier = Modifier.weight(1f)) { // Columna para el texto, toma el espacio restante
+            Column(modifier = Modifier.padding(16.dp)) { // Columna para el texto, toma el espacio restante
                 Text(
                     text = movie.title,
                     style = MaterialTheme.typography.titleMedium,
@@ -104,7 +106,8 @@ fun MovieItemPreview() {
                 overview = "Esta es una breve descripción de la película de ejemplo...",
                 releaseDate = "2023-01-01",
                 voteAverage = 7.5
-            )
+        ),
+        onMovieClick = {} // Add this line
         )
     }
 }
