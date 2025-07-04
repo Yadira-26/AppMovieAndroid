@@ -87,10 +87,6 @@ fun SearchScreen(
 @Composable
 fun SearchScreenPreview() {
     AppAndroidMovieTheme {
-        SearchScreen(
-            movieViewModel = TODO(),
-            modifier = TODO()
-        )
         // Para una preview funcional, necesitarías instanciar un ViewModel,
         // lo cual puede ser complejo para previews simples.
         // Aquí mostramos solo la estructura básica de la UI sin datos dinámicos.

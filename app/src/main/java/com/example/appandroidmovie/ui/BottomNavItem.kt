@@ -1,6 +1,7 @@
 package com.example.appandroidmovie.ui
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -18,13 +19,15 @@ import com.example.appandroidmovie.AppDestinations
 sealed class BottomNavItem(val route: String, val icon: ImageVector, val label: String) {
     object Home : BottomNavItem(AppDestinations.HOME_ROUTE, Icons.Filled.Home, "Inicio")
     object Search : BottomNavItem(AppDestinations.SEARCH_ROUTE, Icons.Filled.Search, "Buscar")
+    object Favorites : BottomNavItem(AppDestinations.FAVORITES_ROUTE, Icons.Filled.Favorite, "Favoritos")
 }
 
 @Composable
 fun AppBottomNavigationBar(navController: NavController) {
     val items = listOf(
         BottomNavItem.Home,
-        BottomNavItem.Search
+        BottomNavItem.Search,
+        BottomNavItem.Favorites,
     )
     NavigationBar {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
