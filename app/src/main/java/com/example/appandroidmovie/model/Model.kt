@@ -24,5 +24,6 @@ data class Movie(
     @SerialName("release_date")
     val releaseDate: String = "N/A",
     @SerialName("vote_average")
-    val voteAverage: Double = 0.0
+    val voteAverage: Double = 0.0,
+    @SerialName("vote_count") val voteCount: Int = 0
 )

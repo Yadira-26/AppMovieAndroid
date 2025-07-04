@@ -5,6 +5,8 @@ package com.example.appandroidmovie.ui
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appandroidmovie.model.Movie
@@ -36,6 +38,16 @@ class MovieViewModel : ViewModel() {
 
     // Declare searchJob here
     private var searchJob: Job? = null
+
+    // Para la película seleccionada en la pantalla de detalles
+    private val _selectedMovie = MutableLiveData<Movie?>()
+    val selectedMovie: LiveData<Movie?> = _selectedMovie
+
+    private val _isLoadingDetail = MutableLiveData<Boolean>()
+    val isLoadingDetail: LiveData<Boolean> = _isLoadingDetail
+
+    private val _errorMessageDetail = MutableLiveData<String?>()
+    val errorMessageDetail: LiveData<String?> = _errorMessageDetail
 
     init {
         fetchPopularMovies()

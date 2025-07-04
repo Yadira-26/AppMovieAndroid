@@ -1,6 +1,7 @@
 package com.example.appandroidmovie.network
 
 import android.util.Log
+import com.example.appandroidmovie.model.Movie
 import com.example.appandroidmovie.model.MovieResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -10,7 +11,6 @@ import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-
 
 
 object MovieService {
@@ -62,7 +62,35 @@ object MovieService {
         }
     }
 
+    /**
+     * Obtiene los detalles de una película específica por su ID.
+     * TMDB retorna directamente el objeto de la película para este endpoint.
+     * Asegúrate de que tu modelo `Movie` tiene todos los campos que la API retorna para los detalles,
+     * o crea un modelo `MovieDetail` más específico si es necesario.
+     */
+    suspend fun getMovieDetails(movieId: Int, language: String = "es-ES"): Movie? {
+        return try {
+            val response = client.get("${BASE_URL}movie/$movieId") {
+                parameter("api_key", API_KEY)
+                parameter("language", language)
+                // Aquí puedes añadir más parámetros si la API los soporta para detalles,
+                // como append_to_response (ej. para obtener videos o créditos).
+            }
+            Log.d("MovieService", "Raw movie detail response: ${response.bodyAsText()}")
+            response.body() // Ktor intentará deserializar esto directamente a tu clase Movie
+        } catch (e: Exception) {
+            Log.e("MovieService", "Error fetching movie details for ID $movieId: ${e.message}", e)
+            null
+        }
+    }
+
+    /**
+     * Construye la URL completa para un póster de película.
+     */
+
     fun getPosterUrl(posterPath: String?): String? {
         return posterPath?.let { "$IMAGE_BASE_URL$it" }
+        if (posterPath.isNullOrEmpty()) return null
+        return "https://image.tmdb.org/t/p/w500$posterPath"
     }
 }
